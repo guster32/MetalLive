@@ -8,19 +8,36 @@
 
 /* Begin PBXBuildFile section */
 		356F6E1925F9CC520021E412 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356F6E1825F9CC520021E412 /* AppDelegate.swift */; };
-		356F6E1B25F9CC520021E412 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356F6E1A25F9CC520021E412 /* ViewController.swift */; };
+		356F6E1B25F9CC520021E412 /* MLViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356F6E1A25F9CC520021E412 /* MLViewController.swift */; };
 		356F6E1D25F9CC530021E412 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 356F6E1C25F9CC530021E412 /* Assets.xcassets */; };
 		356F6E2025F9CC530021E412 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 356F6E1E25F9CC530021E412 /* Main.storyboard */; };
+		356F6E2D25F9CCE60021E412 /* MLInputController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356F6E2C25F9CCE60021E412 /* MLInputController.swift */; };
+		356F6E3125F9CD300021E412 /* MLFileMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356F6E3025F9CD300021E412 /* MLFileMonitor.swift */; };
+		356F6E3925F9E3790021E412 /* MLCustomWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356F6E3825F9E3790021E412 /* MLCustomWindow.swift */; };
+		356F6E3D25F9E9A90021E412 /* MLView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356F6E3C25F9E9A90021E412 /* MLView.swift */; };
+		356F6E4525F9EDA20021E412 /* HappyJumping.metallib in Resources */ = {isa = PBXBuildFile; fileRef = 356F6E4425F9EDA20021E412 /* HappyJumping.metallib */; };
+		356F6E4925F9F1500021E412 /* MetalToy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 356F6E4825F9F1500021E412 /* MetalToy.swift */; };
+		356F6E4C25FA02EC0021E412 /* Empty.metal in Sources */ = {isa = PBXBuildFile; fileRef = 356F6E4B25FA02EC0021E412 /* Empty.metal */; };
+		356F6E4F25FA03470021E412 /* Empty.metallib in Resources */ = {isa = PBXBuildFile; fileRef = 356F6E4E25FA03470021E412 /* Empty.metallib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		356F6E1525F9CC520021E412 /* MetalLive.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalLive.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		356F6E1825F9CC520021E412 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		356F6E1A25F9CC520021E412 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		356F6E1A25F9CC520021E412 /* MLViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLViewController.swift; sourceTree = "<group>"; };
 		356F6E1C25F9CC530021E412 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		356F6E1F25F9CC530021E412 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		356F6E2125F9CC530021E412 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		356F6E2225F9CC530021E412 /* MetalLive.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MetalLive.entitlements; sourceTree = "<group>"; };
+		356F6E2C25F9CCE60021E412 /* MLInputController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLInputController.swift; sourceTree = "<group>"; };
+		356F6E3025F9CD300021E412 /* MLFileMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLFileMonitor.swift; sourceTree = "<group>"; };
+		356F6E3525F9DFD20021E412 /* HappyJumping.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = HappyJumping.metal; sourceTree = "<group>"; };
+		356F6E3825F9E3790021E412 /* MLCustomWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLCustomWindow.swift; sourceTree = "<group>"; };
+		356F6E3C25F9E9A90021E412 /* MLView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MLView.swift; sourceTree = "<group>"; };
+		356F6E4425F9EDA20021E412 /* HappyJumping.metallib */ = {isa = PBXFileReference; lastKnownFileType = "archive.metal-library"; path = HappyJumping.metallib; sourceTree = "<group>"; };
+		356F6E4825F9F1500021E412 /* MetalToy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MetalToy.swift; sourceTree = "<group>"; };
+		356F6E4B25FA02EC0021E412 /* Empty.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Empty.metal; sourceTree = "<group>"; };
+		356F6E4E25FA03470021E412 /* Empty.metallib */ = {isa = PBXFileReference; lastKnownFileType = "archive.metal-library"; path = Empty.metallib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -37,10 +54,14 @@
 		356F6E0C25F9CC520021E412 = {
 			isa = PBXGroup;
 			children = (
+				356F6E3425F9DFB10021E412 /* Shader */,
+				356F6E4725F9F12D0021E412 /* Renderer */,
 				356F6E1725F9CC520021E412 /* MetalLive */,
 				356F6E1625F9CC520021E412 /* Products */,
 			);
+			indentWidth = 2;
 			sourceTree = "<group>";
+			tabWidth = 2;
 		};
 		356F6E1625F9CC520021E412 /* Products */ = {
 			isa = PBXGroup;
@@ -54,13 +75,36 @@
 			isa = PBXGroup;
 			children = (
 				356F6E1825F9CC520021E412 /* AppDelegate.swift */,
-				356F6E1A25F9CC520021E412 /* ViewController.swift */,
+				356F6E1A25F9CC520021E412 /* MLViewController.swift */,
 				356F6E1C25F9CC530021E412 /* Assets.xcassets */,
 				356F6E1E25F9CC530021E412 /* Main.storyboard */,
 				356F6E2125F9CC530021E412 /* Info.plist */,
 				356F6E2225F9CC530021E412 /* MetalLive.entitlements */,
+				356F6E2C25F9CCE60021E412 /* MLInputController.swift */,
+				356F6E3025F9CD300021E412 /* MLFileMonitor.swift */,
+				356F6E3825F9E3790021E412 /* MLCustomWindow.swift */,
+				356F6E3C25F9E9A90021E412 /* MLView.swift */,
 			);
 			path = MetalLive;
+			sourceTree = "<group>";
+		};
+		356F6E3425F9DFB10021E412 /* Shader */ = {
+			isa = PBXGroup;
+			children = (
+				356F6E4E25FA03470021E412 /* Empty.metallib */,
+				356F6E4425F9EDA20021E412 /* HappyJumping.metallib */,
+				356F6E3525F9DFD20021E412 /* HappyJumping.metal */,
+				356F6E4B25FA02EC0021E412 /* Empty.metal */,
+			);
+			path = Shader;
+			sourceTree = "<group>";
+		};
+		356F6E4725F9F12D0021E412 /* Renderer */ = {
+			isa = PBXGroup;
+			children = (
+				356F6E4825F9F1500021E412 /* MetalToy.swift */,
+			);
+			path = Renderer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,6 +164,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				356F6E4525F9EDA20021E412 /* HappyJumping.metallib in Resources */,
+				356F6E4F25FA03470021E412 /* Empty.metallib in Resources */,
 				356F6E1D25F9CC530021E412 /* Assets.xcassets in Resources */,
 				356F6E2025F9CC530021E412 /* Main.storyboard in Resources */,
 			);
@@ -132,8 +178,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				356F6E1B25F9CC520021E412 /* ViewController.swift in Sources */,
+				356F6E4925F9F1500021E412 /* MetalToy.swift in Sources */,
+				356F6E1B25F9CC520021E412 /* MLViewController.swift in Sources */,
+				356F6E3D25F9E9A90021E412 /* MLView.swift in Sources */,
 				356F6E1925F9CC520021E412 /* AppDelegate.swift in Sources */,
+				356F6E3925F9E3790021E412 /* MLCustomWindow.swift in Sources */,
+				356F6E3125F9CD300021E412 /* MLFileMonitor.swift in Sources */,
+				356F6E2D25F9CCE60021E412 /* MLInputController.swift in Sources */,
+				356F6E4C25FA02EC0021E412 /* Empty.metal in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
