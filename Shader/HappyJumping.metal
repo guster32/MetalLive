@@ -368,7 +368,7 @@ kernel void metaltoy(texture2d<float, access::write> output [[texture(0)]],
     
     ///Camera
     float cl = sin(0.5*time);
-    float an = 1.57 + 0.7*sin(0.15*time);//10.57 * iMouse.x / iResolution.x;
+    float an = 10.57 * (-.5 +(iMouse.x / iResolution.x));//1.57 + 0.7*sin(0.15*time);
     float3 ta = float3(0.0, 0.65, -0.6 + time*1.0 - 0.4*cl);
     float3 ro = ta + float3( 1.3*cos(an), -0.250, 1.3*sin(an));
     float ti = fract(time-0.15);
