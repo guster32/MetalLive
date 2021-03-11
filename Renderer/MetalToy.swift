@@ -56,11 +56,11 @@ class MetalToy: NSObject {
   public func buildPipeline(metallibUrl:URL, device:MTLDevice) throws {
     queue = device.makeCommandQueue()
     let fileHandle = try FileHandle(forReadingFrom: metallibUrl)
-    let newData = fileHandle.readDataToEndOfFile()
-    let dataa = newData.withUnsafeBytes {
-      DispatchData(bytes: UnsafeRawBufferPointer(start: $0, count: newData.count))
+    let buffer = fileHandle.readDataToEndOfFile()
+    let dbuffer = buffer.withUnsafeBytes {
+      DispatchData(bytes: UnsafeRawBufferPointer(start: $0, count: buffer.count))
     }
-    let library = try device.makeLibrary(data:dataa as __DispatchData)
+    let library = try device.makeLibrary(data:dbuffer as __DispatchData)
     guard let kernelFunction = library.makeFunction(name: ENTRY_KERNEL_FUNCTION) else { throw FunctionNotFound (title: "FunctionNotFound", description: "\(ENTRY_KERNEL_FUNCTION) not found on metallib \(metallibUrl.absoluteString)", code: -1) }
     self.pipelineState = try device.makeComputePipelineState(function:kernelFunction)
   }
@@ -71,7 +71,8 @@ extension MetalToy: MTKViewDelegate {
   public func mtkView(_ view: MTKView, drawableSizeWillChange size: CGSize) {}
   
   public func draw(in view: MTKView) {
-    time += 0.01
+    let aView = view as! MLView
+    if(!aView.isAnimationPaused) { time += 0.01 }
     guard let commandBuffer = queue.makeCommandBuffer(),
           let commandEncoder = commandBuffer.makeComputeCommandEncoder(),
           let drawable = view.currentDrawable else { fatalError() }

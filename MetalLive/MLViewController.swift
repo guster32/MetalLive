@@ -40,6 +40,22 @@ class MLViewController: NSViewController {
       }
     }
   }
+  
+  @IBAction func pause(_ sender: Any) {
+    let aView = self.view as! MLView
+    if(aView.isAnimationPaused){
+      print("PLAY")
+      aView.isAnimationPaused = false
+    } else {
+      print("PAUSE")
+      aView.isAnimationPaused = true
+    }
+  }
+  
+  @IBAction func restart(_ sender: Any) {
+    print("RESTART")
+    renderer.time = 0
+  }
     
   private func resetViewToSafeDefault() {
     print("Resetting view to safe defaults.")
@@ -120,17 +136,17 @@ extension MLViewController {
   }
   
   @objc func handlePan(gesture: NSPanGestureRecognizer) {
+    let location = gesture.location(in: gesture.view)
     let translation = gesture.translation(in: gesture.view)
     let delta = SIMD2<Float>(Float(translation.x),
                              Float(translation.y))
-    print("Mouse move \(delta)")
-    //renderer?.camera.rotate(delta: delta)
+    renderer.setMouse(location: location)
     gesture.setTranslation(.zero, in: gesture.view)
   }
   
   override func scrollWheel(with event: NSEvent) {
     print("Mouse scroll wheel \(event.deltaY)")
-    //renderer?.camera.zoom(delta: Float(event.deltaY))
+//    renderer?.camera.zoom(delta: Float(event.deltaY))
   }
 }
 

@@ -9,6 +9,7 @@ import MetalKit
 
 class MLView: MTKView {
   let inputController =  MLInputController()
+  var isAnimationPaused = false
 }
 
 extension MLView: MouseDelegate {

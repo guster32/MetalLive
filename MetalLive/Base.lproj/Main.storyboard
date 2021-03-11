@@ -56,6 +56,26 @@
                             <menuItem title="Window" id="aUF-d1-5bR">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                             </menuItem>
+                            <menuItem title="Player" id="faj-yy-3D6">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                                <menu key="submenu" title="Player" id="sxt-sh-GEu">
+                                    <items>
+                                        <menuItem title="Pause" keyEquivalent="p" id="zrD-UU-Nki">
+                                            <connections>
+                                                <action selector="pause:" target="Ady-hI-5gd" id="AVg-LH-5hR"/>
+                                            </connections>
+                                        </menuItem>
+                                        <menuItem title="Restart" keyEquivalent="r" id="wdc-Fl-F5V">
+                                            <connections>
+                                                <action selector="restart:" target="Ady-hI-5gd" id="oIB-Rv-Sl0"/>
+                                            </connections>
+                                        </menuItem>
+                                    </items>
+                                </menu>
+                            </menuItem>
+                            <menuItem title="Window" id="bir-ad-jgq">
+                                <modifierMask key="keyEquivalentModifierMask"/>
+                            </menuItem>
                             <menuItem title="Help" id="wpr-3q-Mcd">
                                 <modifierMask key="keyEquivalentModifierMask"/>
                                 <menu key="submenu" title="Help" systemMenu="help" id="F2S-fz-NVQ">
