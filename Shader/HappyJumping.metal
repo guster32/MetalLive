@@ -1,3 +1,21 @@
+// Created by inigo quilez - iq/2019
+// I share this piece (art and code) here in Shadertoy and through its Public API, only for educational purposes.
+// You cannot use, sell, share or host this piece or modifications of it as part of your own commercial or non-commercial product, website or project.
+// You can share a link to it or an unmodified screenshot of it provided you attribute "by Inigo Quilez, @iquilezles and iquilezles.org".
+// If you are a teacher, lecturer, educator or similar and these conditions are too restrictive for your needs, please contact me and we'll work it out.
+
+
+// An animation test - a happy and blobby creature
+// jumping and looking around. It gets off-model very
+// often, but it looks good enough I think.
+//
+// Making-of with math/shader/art explanations (6 hours
+// long): https://www.youtube.com/watch?v=Cfe5UQ-1L9Q
+//
+// Video capture: https://www.youtube.com/watch?v=s_UOFo2IULQ
+//
+// Buy a metal print here: https://www.redbubble.com/i/metal-print/Happy-Jumping-by-InigoQuilez/43594745.0JXQP
+
 #include <metal_stdlib>
 using namespace metal;
 
@@ -5,46 +23,53 @@ float mod(float x, float y) {
     return x - y * floor(x/y);
 }
 
-
 ///Smooth minimum smoothly morphs SDF
+// http://iquilezles.org/www/articles/smin/smin.htm
 float smin(float a, float b, float k) {
     float h = max(k - abs(a-b), 0.0);
     return min(a, b) - h*h*0.25/k;
 }
 
+// http://iquilezles.org/www/articles/smin/smin.htm
 float2 smin(float2 a, float2 b, float k) {
     float h = clamp(0.5 + 0.5 * (b.x - a.x)/k, 0.0, 1.0);
     return mix(b, a, h) - k*h*(1.0 - h);
 }
 
 ///Smooth max smoothly removes SDF
+// http://iquilezles.org/www/articles/smin/smin.htm
 float smax(float a, float b, float k) {
     float h = max(k - abs(a-b), 0.0);
     return max(a, b) + h*h*0.25/k;
 }
 
+// http://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm
 float sdSphere(float3 p, float s) {
     return length(p) - s;
 }
 
-float sdEllipsoid(float3 p, float3 r) {
+// http://www.iquilezles.org/www/articles/distfunctions/distfunctions.htm
+float sdEllipsoid(float3 p, float3 r) { // approximated
     float k0 = length(p/r);
     float k1 = length(p/(r*r));
     return k0 * (k0-1.0)/k1;
 }
 
-float2 sdStick(float3 p, float3 a, float3 b, float r1, float r2 ) {
+float2 sdStick(float3 p, float3 a, float3 b, float r1, float r2 ) { // approximated
     float3 pa = p - a, ba = b - a;
     float h = clamp(dot(pa, ba) / dot(ba, ba), 0.0, 1.0);
     return float2(length(pa - ba * h) - mix(r1, r2, h*h*(3.0-2.0*h)),h);
 }
 
 //Union Operator
+// http://iquilezles.org/www/articles/smin/smin.htm
 float4 opU(float4 d1, float4 d2) {
     return (d1.x<d2.x) ? d1 : d2;
 }
 
 float4 map(float3 pos, float atime) {
+    float hsha = 1.0;
+    float href;
     float t1 = fract(atime);
     float t4 = abs(fract(atime*0.5)-0.5)/0.5;
     
@@ -72,7 +97,7 @@ float4 map(float3 pos, float atime) {
     float rs = sin(rot);
     q.xy = float2x2(rc,rs,-rs,rc)*q.xy;
     float3 r = q;
-    
+    href = q.y;
     q.yz = float2( dot(uu,q.yz), dot(vv,q.yz) );
     float4 res = float4(sdEllipsoid(q, float3(0.25, 0.25 * sy, 0.25 *sz)), 2.0, 0.0, 1.0);
     
@@ -171,10 +196,11 @@ float4 map(float3 pos, float atime) {
         float siz = 4.0*fy*(1.0-fy);
         float d2 = sdEllipsoid( vp-float3(2.0,y,0.0), siz*rad );
         
+        d2 -= 0.03*smoothstep(-1.0,1.0,sin(18.0*pos.x)+sin(18.0*pos.y)+sin(18.0*pos.z));
         d2 *= 0.6;
         d2 = min(d2,2.0);
         d = smin( d, d2, 0.32 );
-        if( d<res.x ) res = float4(d,1.0, 0.0, 1.0);
+        if( d<res.x ) {res = float4(d,1.0, 0.0, 1.0); hsha=sqrt(siz); }
     }
     
     // candy
@@ -198,6 +224,14 @@ float4 castRay(float3 ro, float3 rd, float time) {
     float4 res = float4(-1.0, -1.0, 0.0, 1.0);
     float tmin = 0.5;
     float tmax = 20.0;
+
+    #if 1
+    // raytrace bounding plane
+    float tp = (3.5-ro.y)/rd.y;
+    if( tp>0.0 ) tmax = min( tmax, tp );
+  #endif
+
+    // raymarch scene
     float t = tmin;
     for(int i=0; i<256 && t<tmax; i++) {
         float4 h = map(ro+rd*t, time);
@@ -208,30 +242,6 @@ float4 castRay(float3 ro, float3 rd, float time) {
         t += h.x;
     }
     return res;
-}
-
-/**
- By measuring the change in the distance in small increments of x and y we calculate a vector
- this vector is a gradient calculation this is equivalent to the Surface normal is used to calculate the ligthing.
-**/
-float3 calcNormal(float3 pos, float time) {
-    float2 e = float2(0.0005, 0.0);
-    return normalize(float3(map(pos + e.xyy, time).x - map(pos - e.xyy, time).x,
-                            map(pos + e.yxy, time).x - map(pos - e.yxy, time).x,
-                            map(pos + e.yyx, time).x - map(pos - e.yyx, time).x));
-}
-
-float calcOcclusion(float3 pos, float3 nor, float time) {
-    float occ = 0.0;
-    float sca = 1.0;
-    for( int i=0; i<5; i++ ) {
-        float h = 0.01 + 0.11*float(i)/4.0;
-        float3 opos = pos + h*nor;
-        float d = map( opos, time ).x;
-        occ += (h-d)*sca;
-        sca *= 0.95;
-    }
-    return clamp( 1.0 - 2.0*occ, 0.0, 1.0 );
 }
 
 /// http://iquilezles.org/www/articles/rmshadows/rmshadows.htm
@@ -254,6 +264,42 @@ float calcSoftshadow( float3 ro, float3 rd, float time )
         if( res<0.005 || t>tmax ) break;
     }
     return clamp( res, 0.0, 1.0 );
+}
+
+/**
+ By measuring the change in the distance in small increments of x and y we calculate a vector
+ this vector is a gradient calculation this is equivalent to the Surface normal is used to calculate the ligthing.
+**/
+// http://iquilezles.org/www/articles/normalsSDF/normalsSDF.htm
+float3 calcNormal(float3 pos, float time ){
+#if 0
+    float2 e = float2(1.0,-1.0)*0.5773*0.001;
+    return normalize( e.xyy*map( pos + e.xyy, time ).x +
+            e.yyx*map( pos + e.yyx, time ).x +
+            e.yxy*map( pos + e.yxy, time ).x +
+            e.xxx*map( pos + e.xxx, time ).x );
+#else
+    // inspired by tdhooper and klems - a way to prevent the compiler from inlining map() 4 times
+    float3 n = float3(0.0);
+    for( int i=0; i<4; i++ ){
+        float3 e = 0.5773*(2.0*float3((((i+3)>>1)&1),((i>>1)&1),(i&1))-1.0);
+        n += e*map(pos+0.001*e,time).x;
+    }
+    return normalize(n);
+#endif
+}
+
+float calcOcclusion(float3 pos, float3 nor, float time) {
+    float occ = 0.0;
+    float sca = 1.0;
+    for( int i=0; i<5; i++ ) {
+        float h = 0.01 + 0.11*float(i)/4.0;
+        float3 opos = pos + h*nor;
+        float d = map( opos, time ).x;
+        occ += (h-d)*sca;
+        sca *= 0.95;
+    }
+    return clamp( 1.0 - 2.0*occ, 0.0, 1.0 );
 }
 
 float3 render(float3 ro, float3 rd, float time) {
@@ -352,6 +398,8 @@ float3x3 setCamera(float3 ro, float3 ta, float cr) {
     return float3x3(cu, cv, cw);
 }
 
+#define AA 1
+#define ZERO 0
 kernel void metaltoy(texture2d<float, access::write> output [[texture(0)]],
                     constant float  &iTime [[buffer(0)]],
                     constant float2 &iMouse [[buffer(1)]],
@@ -359,27 +407,72 @@ kernel void metaltoy(texture2d<float, access::write> output [[texture(0)]],
     float2 iResolution = float2(output.get_width(), output.get_height());
     float2 fragCoord = float2(gid);
     
-    //float2 p = (2.0 * fragCoord - iResolution ) / iResolution.y;
-    float2 p = (-iResolution.xy + 2.0*fragCoord)/iResolution.y;;
-    p.y = -p.y; //Make coordinate system match OpenGL
-    float time = iTime;
-    time *= 1.7;
-    
-    
-    ///Camera
-    float cl = sin(0.5*time);
-    float an = 10.57 * (-.5 +(iMouse.x / iResolution.x));//1.57 + 0.7*sin(0.15*time);
-    float3 ta = float3(0.0, 0.65, -0.6 + time*1.0 - 0.4*cl);
-    float3 ro = ta + float3( 1.3*cos(an), -0.250, 1.3*sin(an));
-    float ti = fract(time-0.15);
-    ti = 4.0*ti*(1.0-ti);
-    ta.y += 0.15*ti*ti*(3.0-2.0*ti)*smoothstep(0.4,0.9,cl);
-    
-    float3x3 ca = setCamera(ro, ta, 0.0);
-    float3 rd = ca * normalize(float3(p, 1.8));
-    float3 col = render(ro, rd, time);
-    
-    col = pow(col, float3(0.4545));
-    output.write(float4(col, 1.0), uint2(fragCoord.x, fragCoord.y));
-}
 
+    float3 tot = float3(0.0);
+
+#if AA>1
+    for( int m=ZERO; m<AA; m++ )
+    for( int n=ZERO; n<AA; n++ ) {
+        //pixel coordinates Antialiasing
+        float2 o = float2(float(m), float(m))/float(AA) - 0.5;
+        float2 p = (-iResolution.xy + 2.0*(fragCoord+o))/iResolution.y;
+        // time coordinate (motion blurred, shutter=0.5)
+        float d = 0.5+0.5*sin(fragCoord.x*147.0)*sin(fragCoord.y*131.0);
+        float time = iTime - 0.5*(1.0/24.0)*(float(m*AA+n)+d)/float(AA*AA);
+#else
+        float2 p = (-iResolution.xy + 2.0*fragCoord)/iResolution.y;
+        float time = iTime;
+#endif
+        p.y = -p.y;  //Make coordinate system match OpenGL
+        
+        time += -2.6;
+        time *= 1.7;
+        
+        ///Camera
+        float cl = sin(0.5*time);
+        // float an = 1.57 + 0.7*sin(0.15*time);
+        float an = 1.57 + (-1.5 * (iMouse.x / iResolution.x));
+        float3 ta = float3(0.0, 0.65, -0.6 + time*1.0 - 0.4*cl);
+        float3 ro = ta + float3( 1.3*cos(an), -0.250, 1.3*sin(an));
+        float ti = fract(time-0.15);
+        ti = 4.0*ti*(1.0-ti);
+        ta.y += 0.15*ti*ti*(3.0-2.0*ti)*smoothstep(0.4,0.9,cl);
+
+        // Camera bounce
+        float t4 = abs(fract(time*0.5)-0.5)/0.5;
+        float bou = -1.0 + 2.0*t4;
+        ro += 0.06*sin(time*12.0 + float3(0.0, 2.0, 4.0))*smoothstep(0.85, 1.0, abs(bou));
+
+        // camera-to-world rotation
+        float3x3 ca = setCamera(ro, ta, 0.0);
+
+        // ray direction
+        float3 rd = ca * normalize(float3(p, 1.8));
+
+        //render
+        float3 col = render(ro, rd, time);
+        
+        // color grading
+        col = col*float3(1.11,0.89,0.79);
+
+        // compress
+        col = 1.35*col/(1.0+col);
+        
+        // gamma
+        col = pow( col, float3(0.4545) );
+        tot += col;
+#if AA>1
+    }
+    tot /= float(AA*AA);
+#endif
+    // s-surve
+    tot = clamp(tot,0.0,1.0);
+    tot = tot*tot*(3.0-2.0*tot);
+
+    // vignetting
+    float2 q = fragCoord/iResolution.xy;
+    tot *= 0.5 + 0.5*pow(16.0*q.x*q.y*(1.0-q.x)*(1.0-q.y),0.25);
+
+    //output
+    output.write(float4(tot, 1.0), uint2(fragCoord.x, fragCoord.y));
+}
