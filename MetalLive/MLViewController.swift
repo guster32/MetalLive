@@ -137,9 +137,8 @@ extension MLViewController {
   
   @objc func handlePan(gesture: NSPanGestureRecognizer) {
     let location = gesture.location(in: gesture.view)
-    let translation = gesture.translation(in: gesture.view)
-    let delta = SIMD2<Float>(Float(translation.x),
-                             Float(translation.y))
+//    let translation = gesture.translation(in: gesture.view)
+//    let delta = SIMD2<Float>(Float(translation.x), Float(translation.y))
     renderer.setMouse(location: location)
     gesture.setTranslation(.zero, in: gesture.view)
   }
